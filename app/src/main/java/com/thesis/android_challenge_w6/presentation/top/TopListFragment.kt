@@ -1,9 +1,7 @@
 package com.thesis.android_challenge_w6.presentation.top
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -19,6 +17,7 @@ class TopListFragment : Fragment() {
     private lateinit var topListViewModel: TopListViewModel
     private lateinit var binding: FragmentTopListBinding
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
       setupViewModel(inflater,container)
         val view = binding.root
@@ -28,6 +27,7 @@ class TopListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
+        setHasOptionsMenu(true)
         val userFragment = parentFragment as UserFragment
         val email = userFragment.getEmailFromBundle()
         topListViewModel.accessedEmail.value = email
@@ -36,6 +36,21 @@ class TopListFragment : Fragment() {
                 topListAdapter.submitList(it)
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_user, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.item_grid -> {
+                showToastMessage("Top Clicked")
+                return true
+            }
+        }
+        return false
     }
 
     private fun setupViewModel(inflater: LayoutInflater,container: ViewGroup?){

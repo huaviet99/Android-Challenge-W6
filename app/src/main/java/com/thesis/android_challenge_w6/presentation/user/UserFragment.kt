@@ -1,16 +1,18 @@
 package com.thesis.android_challenge_w6.presentation.user
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.thesis.android_challenge_w6.R
+import com.thesis.android_challenge_w6.presentation.main.MainActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.*
 
 
 class UserFragment : Fragment() {
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_user, container, false)
         return view
@@ -18,10 +20,18 @@ class UserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).appBarLayout?.visibility  = View.VISIBLE
         setupBottomNavigationView()
         setupViewPager()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity).appBarLayout?.visibility  = View.GONE
 
     }
+
 
     fun getEmailFromBundle(): String? {
         return arguments?.getString("email")
@@ -45,7 +55,7 @@ class UserFragment : Fragment() {
     }
 
     private fun setupViewPager() {
-        toolbar.title = "Top Restaurant"
+        (activity as MainActivity).supportActionBar?.title  = "Top Restaurant"
         val mainViewPagerAdapter = UserViewPagerAdapter(childFragmentManager)
         user_view_pager.adapter = mainViewPagerAdapter
         user_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
@@ -61,12 +71,14 @@ class UserFragment : Fragment() {
                 when (position) {
                     UserViewPagerAdapter.TOP_PAGE -> {
                         bottom_nav_user.menu.findItem(R.id.item_top).isChecked = true
-                        toolbar.title = "Top Restaurant"
+                        (activity as MainActivity).supportActionBar?.title  ="Top Restaurant"
+
 
                     }
                     UserViewPagerAdapter.FAVORITE_PAGE -> {
                         bottom_nav_user.menu.findItem(R.id.item_favorite).isChecked = true
-                        toolbar.title = "Favorite Restaurant"
+                        (activity as MainActivity).supportActionBar?.title  ="Favorite Restaurant"
+
                         activity!!.runOnUiThread { mainViewPagerAdapter.notifyDataSetChanged() }
 
                     }
