@@ -4,10 +4,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.databinding.FragmentFavoriteListBinding
 import com.thesis.android_challenge_w6.presentation.user.UserFragment
@@ -17,6 +21,7 @@ class FavoriteListFragment : Fragment() {
     private lateinit var favoriteListViewModel: FavoriteListViewModel
     private lateinit var binding: FragmentFavoriteListBinding
 
+    private lateinit var menu: Menu
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +35,7 @@ class FavoriteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("FavoriteLs","onViewCreated")
+        Log.d("FavoriteLs", "onViewCreated")
         setupRecyclerView()
         setHasOptionsMenu(true)
         val userFragment = parentFragment as UserFragment
@@ -46,13 +51,24 @@ class FavoriteListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_user, menu)
+        this.menu = menu
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.item_grid -> {
                 showToastMessage("Favorite Clicked")
+                val isLinearSwitched: Boolean = favoriteListAdapter.toggleItemViewType()
+
+                if (isLinearSwitched) {
+                    binding.rvFavoriteList.layoutManager = LinearLayoutManager(activity)
+                    menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_grid)
+                } else {
+                    binding.rvFavoriteList.layoutManager = GridLayoutManager(activity, 2)
+                    menu[0].icon =
+                        ContextCompat.getDrawable(requireActivity(), R.drawable.ic_linear)
+                }
                 return true
             }
         }
