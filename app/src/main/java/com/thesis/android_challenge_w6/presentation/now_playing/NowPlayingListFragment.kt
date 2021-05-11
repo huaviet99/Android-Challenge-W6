@@ -5,11 +5,13 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
@@ -22,7 +24,6 @@ class NowPlayingListFragment : Fragment() {
     private lateinit var nowPlayingListAdapter: NowPlayingListAdapter
     private lateinit var nowPlayingListViewModel: NowPlayingListViewModel
     private lateinit var binding: FragmentNowPlayingBinding
-    private var isLinearSwitched = true
     private lateinit var menu: Menu
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,11 +50,11 @@ class NowPlayingListFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Log.d("NowPlaying","onCreateOption")
+        Log.d("NowPlaying", "onCreateOption")
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_home, menu)
         this.menu = menu
-        if (isLinearSwitched) {
+        if (nowPlayingListViewModel.isLinearSwitched.value!!) {
             menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_grid)
         } else {
             menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_linear)
@@ -63,9 +64,9 @@ class NowPlayingListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                 isLinearSwitched  = nowPlayingListAdapter.toggleItemViewType()
+                nowPlayingListViewModel.isLinearSwitched.value = nowPlayingListAdapter.toggleItemViewType()
 
-                if (isLinearSwitched) {
+                if (nowPlayingListViewModel.isLinearSwitched.value!!) {
                     binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
                     menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_grid)
                 } else {
@@ -88,10 +89,19 @@ class NowPlayingListFragment : Fragment() {
 
 
     private fun setupRecyclerView() {
+        Log.d("NowPlaying", "setupRecycler")
         nowPlayingListAdapter = NowPlayingListAdapter()
-        nowPlayingListAdapter.listener = object : NowPlayingListAdapter.NowPlayingAdapterListener{
+        nowPlayingListAdapter.isLinearSwitched = nowPlayingListViewModel.isLinearSwitched.value!!
+        if (nowPlayingListAdapter.isLinearSwitched) {
+            binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
+        } else {
+            binding.rvNowPlaying.layoutManager = GridLayoutManager(activity, 2)
+
+        }
+        nowPlayingListAdapter.listener = object : NowPlayingListAdapter.NowPlayingAdapterListener {
             override fun onItemClicked(restaurant: Restaurant) {
-                showToastMessage(restaurant.name)
+                val bundle = bundleOf("restaurant" to restaurant)
+                findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
             }
         }
         binding.rvNowPlaying.adapter = nowPlayingListAdapter

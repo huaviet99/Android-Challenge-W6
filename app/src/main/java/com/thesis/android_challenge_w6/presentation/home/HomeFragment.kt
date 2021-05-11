@@ -28,7 +28,6 @@ class HomeFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         (activity as MainActivity).appBarLayout?.visibility  = View.GONE
-
     }
 
 

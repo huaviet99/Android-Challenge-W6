@@ -9,6 +9,11 @@ import com.thesis.android_challenge_w6.model.Restaurant
 class NowPlayingListViewModel : ViewModel(){
 
     private val restaurantList = MutableLiveData<List<Restaurant>>()
+     val isLinearSwitched = MutableLiveData<Boolean>()
+    init {
+        isLinearSwitched.value = true
+    }
+
     val accessedEmail = MutableLiveData<String>()
     fun fetchRestaurantList(): LiveData<List<Restaurant>>{
        val data = RestaurantDataStore.getAllRestaurantListWithFavoriteChecked(accessedEmail.value!!)

@@ -18,7 +18,7 @@ class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHold
         const val GRID_ITEM = 1
     }
 
-    private var isLinearSwitched = true
+    var isLinearSwitched = true
     var listener : TopRatedAdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

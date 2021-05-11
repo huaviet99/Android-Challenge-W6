@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.model.Restaurant
-import com.thesis.android_challenge_w6.presentation.favorite.TopRatedListAdapter
 
 class NowPlayingListAdapter :
     ListAdapter<Restaurant, NowPlayingListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
@@ -22,7 +21,7 @@ class NowPlayingListAdapter :
 
     var listener: NowPlayingAdapterListener? = null
 
-    private var isLinearSwitched = true
+     var isLinearSwitched = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
