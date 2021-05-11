@@ -1,28 +1,26 @@
 package com.thesis.android_challenge_w6.presentation.now_playing
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.presentation.favorite.TopRatedListAdapter
 
-class NowPlayingListAdapter : ListAdapter<Restaurant, NowPlayingListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+class NowPlayingListAdapter :
+    ListAdapter<Restaurant, NowPlayingListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
     }
+
+    var listener: NowPlayingAdapterListener? = null
 
     private var isLinearSwitched = true
 
@@ -39,7 +37,7 @@ class NowPlayingListAdapter : ListAdapter<Restaurant, NowPlayingListAdapter.View
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, listener!!)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -50,47 +48,34 @@ class NowPlayingListAdapter : ListAdapter<Restaurant, NowPlayingListAdapter.View
         }
     }
 
-    fun toggleItemViewType(): Boolean{
+    fun toggleItemViewType(): Boolean {
         isLinearSwitched = !isLinearSwitched
         return isLinearSwitched
     }
 
 
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvMovieName: TextView? = itemView.findViewById(R.id.tv_movie_name)
+        private val tvMovieGenre: TextView? = itemView.findViewById(R.id.tv_movie_genre)
+        private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
+        fun bind(restaurant: Restaurant, listener: NowPlayingAdapterListener) {
+            itemView.setOnClickListener {
+                listener.onItemClicked(restaurant)
+            }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvRestaurantName: TextView = itemView.findViewById(R.id.tv_restaurant_name)
-        private val tvRestaurantAddress: TextView =
-            itemView.findViewById(R.id.tv_restaurant_address)
-        private val imgRestaurant: ImageView = itemView.findViewById(R.id.img_restaurant)
-        private val progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar)
-        fun bind(restaurant: Restaurant) {
-            tvRestaurantName.text = restaurant.name
-            tvRestaurantAddress.text = restaurant.address
-            Glide.with(itemView.context)
-                .load(restaurant.picturePath)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        progressBar.visibility = View.GONE
-                        return false
-                    }
+            if (isLinearSwitched) {
+                tvMovieName!!.text = restaurant.name
+                tvMovieGenre!!.text = restaurant.address
+                Glide.with(itemView.context)
+                    .load(restaurant.picturePath)
+                    .into(imgMovie!!)
+            } else {
+                tvMovieName!!.text = restaurant.name
+                Glide.with(itemView.context)
+                    .load(restaurant.picturePath)
+                    .into(imgMovie!!)
+            }
 
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        progressBar.visibility = View.GONE
-                        return false
-                    }
-                })
-                .into(imgRestaurant)
         }
     }
 
@@ -104,4 +89,7 @@ class NowPlayingListAdapter : ListAdapter<Restaurant, NowPlayingListAdapter.View
         }
     }
 
+    interface NowPlayingAdapterListener {
+        fun onItemClicked(restaurant: Restaurant)
+    }
 }

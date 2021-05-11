@@ -14,13 +14,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.databinding.FragmentFavoriteListBinding
+import com.thesis.android_challenge_w6.model.Restaurant
 import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
 class TopRatedListFragment : Fragment() {
     private lateinit var topRatedListAdapter: TopRatedListAdapter
     private lateinit var topRatedListViewModel: TopRatedListViewModel
     private lateinit var binding: FragmentFavoriteListBinding
-
+    private var isLinearSwitched = true
     private lateinit var menu: Menu
 
     override fun onCreateView(
@@ -50,15 +51,21 @@ class TopRatedListFragment : Fragment() {
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_home, menu)
         this.menu = menu
-        super.onCreateOptionsMenu(menu, inflater)
+
+        if (isLinearSwitched) {
+            menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_grid)
+        } else {
+            menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_linear)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                val isLinearSwitched: Boolean = topRatedListAdapter.toggleItemViewType()
+                isLinearSwitched  = topRatedListAdapter.toggleItemViewType()
 
                 if (isLinearSwitched) {
                     binding.rvTopRated.layoutManager = LinearLayoutManager(activity)
@@ -85,6 +92,11 @@ class TopRatedListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         topRatedListAdapter = TopRatedListAdapter()
+        topRatedListAdapter.listener = object : TopRatedListAdapter.TopRatedAdapterListener{
+            override fun onItemClicked(restaurant: Restaurant) {
+                showToastMessage(restaurant.name)
+            }
+        }
         binding.rvTopRated.adapter = topRatedListAdapter
     }
 

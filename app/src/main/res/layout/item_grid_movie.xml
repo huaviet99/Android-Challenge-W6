@@ -15,28 +15,18 @@
             android:layout_height="match_parent"
             android:paddingBottom="10dp">
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:theme="@style/ProgressBarTheme"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/img_restaurant"
-                app:layout_constraintEnd_toEndOf="@+id/img_restaurant"
-                app:layout_constraintStart_toStartOf="@+id/img_restaurant"
-                app:layout_constraintTop_toTopOf="@+id/img_restaurant" />
 
             <ImageView
-                android:id="@+id/img_restaurant"
+                android:id="@+id/img_movie"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:scaleType="centerCrop"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_restaurant_name"
+                android:id="@+id/tv_movie_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -46,18 +36,29 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/img_restaurant" />
+                app:layout_constraintTop_toBottomOf="@id/img_movie" />
 
             <TextView
-                android:id="@+id/tv_restaurant_address"
+                android:id="@+id/tv_movie_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="5dp"
+                android:text="Textview"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_restaurant_name" />
+                app:layout_constraintTop_toBottomOf="@id/tv_movie_name" />
+
+            <RatingBar
+                android:id="@+id/rating_bar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:max="5"
+                android:rating="3.5"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_movie_year"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_movie_year" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

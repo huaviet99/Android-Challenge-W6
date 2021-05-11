@@ -1,20 +1,14 @@
 package com.thesis.android_challenge_w6.presentation.favorite
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.ProgressBar
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.model.Restaurant
 
@@ -25,7 +19,7 @@ class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHold
     }
 
     private var isLinearSwitched = true
-    var listener : RestaurantAdapterListener? = null
+    var listener : TopRatedAdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -40,7 +34,7 @@ class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHold
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
        val item = getItem(position)
-        holder.bind(item,listener)
+        holder.bind(item,listener!!)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -56,36 +50,29 @@ class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHold
         return isLinearSwitched
     }
 
-     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvRestaurantName: TextView = itemView.findViewById(R.id.tv_restaurant_name)
-        private val tvRestaurantAddress: TextView = itemView.findViewById(R.id.tv_restaurant_address)
-        private val imgRestaurant: ImageView = itemView.findViewById(R.id.img_restaurant)
-         private val imgFavoriteCheck: ImageView? = itemView.findViewById(R.id.img_favorite_check)
-         private val progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar)
-        fun bind(restaurant: Restaurant, listener: RestaurantAdapterListener?) {
-            imgFavoriteCheck?.visibility = View.GONE
-            tvRestaurantName.text = restaurant.name
-            tvRestaurantAddress.text = restaurant.address
-            Glide.with(itemView.context)
-                .load(restaurant.picturePath)
-                .listener(object :RequestListener<Drawable>{
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        progressBar.visibility = View.GONE
-                        return false
-                    }
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvMovieName: TextView? = itemView.findViewById(R.id.tv_movie_name)
+        private val tvMovieGenre: TextView? = itemView.findViewById(R.id.tv_movie_genre)
+        private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
+        fun bind(restaurant: Restaurant,listener: TopRatedAdapterListener) {
+            itemView.setOnClickListener {
+                listener.onItemClicked(restaurant)
+            }
 
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        progressBar.visibility = View.GONE
-                        return false
-                    }
-                })
-                .into(imgRestaurant)
-
-
-            imgFavoriteCheck?.setOnClickListener {
-                listener?.onItemClicked(restaurant)
+            if(isLinearSwitched){
+                tvMovieName!!.text = restaurant.name
+                tvMovieGenre!!.text = restaurant.address
+                Glide.with(itemView.context)
+                    .load(restaurant.picturePath)
+                    .into(imgMovie!!)
+            } else {
+                tvMovieName!!.text = restaurant.name
+                Glide.with(itemView.context)
+                    .load(restaurant.picturePath)
+                    .into(imgMovie!!)
             }
         }
+
     }
 
     class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<Restaurant>() {
@@ -98,8 +85,7 @@ class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHold
         }
     }
 
-    interface RestaurantAdapterListener {
+    interface TopRatedAdapterListener {
         fun onItemClicked(restaurant: Restaurant)
     }
-
 }
