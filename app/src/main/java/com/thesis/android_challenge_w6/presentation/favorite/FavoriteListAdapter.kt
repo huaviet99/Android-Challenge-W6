@@ -60,10 +60,10 @@ class FavoriteListAdapter : ListAdapter<Restaurant, FavoriteListAdapter.ViewHold
         private val tvRestaurantName: TextView = itemView.findViewById(R.id.tv_restaurant_name)
         private val tvRestaurantAddress: TextView = itemView.findViewById(R.id.tv_restaurant_address)
         private val imgRestaurant: ImageView = itemView.findViewById(R.id.img_restaurant)
-         private val imgFavoriteCheck: ImageView = itemView.findViewById(R.id.img_favorite_check)
+         private val imgFavoriteCheck: ImageView? = itemView.findViewById(R.id.img_favorite_check)
          private val progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar)
         fun bind(restaurant: Restaurant, listener: RestaurantAdapterListener?) {
-            imgFavoriteCheck.visibility = View.GONE
+            imgFavoriteCheck?.visibility = View.GONE
             tvRestaurantName.text = restaurant.name
             tvRestaurantAddress.text = restaurant.address
             Glide.with(itemView.context)
@@ -82,7 +82,7 @@ class FavoriteListAdapter : ListAdapter<Restaurant, FavoriteListAdapter.ViewHold
                 .into(imgRestaurant)
 
 
-            imgFavoriteCheck.setOnClickListener {
+            imgFavoriteCheck?.setOnClickListener {
                 listener?.onItemClicked(restaurant)
             }
         }

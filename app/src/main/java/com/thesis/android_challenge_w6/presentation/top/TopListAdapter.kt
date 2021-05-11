@@ -51,6 +51,11 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
         }
     }
 
+    fun toggleItemViewType(): Boolean{
+        isLinearSwitched = !isLinearSwitched
+        return isLinearSwitched
+    }
+
     override fun submitList(list: List<Restaurant>?) {
         super.submitList(list)
         notifyDataSetChanged()
@@ -62,7 +67,7 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
         private val tvRestaurantAddress: TextView =
             itemView.findViewById(R.id.tv_restaurant_address)
         private val imgRestaurant: ImageView = itemView.findViewById(R.id.img_restaurant)
-        private val imgFavoriteCheck: ImageView = itemView.findViewById(R.id.img_favorite_check)
+        private val imgFavoriteCheck: ImageView? = itemView.findViewById(R.id.img_favorite_check)
         private val progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar)
         fun bind(restaurant: Restaurant, listener: RestaurantAdapterListener?) {
             tvRestaurantName.text = restaurant.name
@@ -94,12 +99,12 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
                 .into(imgRestaurant)
 
             if (restaurant.isFavorite) {
-                imgFavoriteCheck.setImageResource(R.drawable.ic_favorite_check)
+                imgFavoriteCheck?.setImageResource(R.drawable.ic_favorite_check)
             } else {
-                imgFavoriteCheck.setImageResource(R.drawable.ic_favorite_uncheck)
+                imgFavoriteCheck?.setImageResource(R.drawable.ic_favorite_uncheck)
 
             }
-            imgFavoriteCheck.setOnClickListener {
+            imgFavoriteCheck?.setOnClickListener {
                 listener?.onItemClicked(restaurant)
             }
         }
