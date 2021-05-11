@@ -1,15 +1,15 @@
-package com.thesis.android_challenge_w6.presentation.user
+package com.thesis.android_challenge_w6.presentation.home
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import com.thesis.android_challenge_w6.presentation.favorite.FavoriteListFragment
-import com.thesis.android_challenge_w6.presentation.top.TopListFragment
+import com.thesis.android_challenge_w6.presentation.favorite.TopRatedListFragment
+import com.thesis.android_challenge_w6.presentation.now_playing.NowPlayingListFragment
 
 
-class UserViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
-    private val fragmentList = listOf<Fragment>(TopListFragment(),FavoriteListFragment())
+class HomeViewPagerAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    private val fragmentList = listOf<Fragment>(NowPlayingListFragment(),TopRatedListFragment())
     companion object {
         const val TOP_PAGE = 0
         const val FAVORITE_PAGE = 1

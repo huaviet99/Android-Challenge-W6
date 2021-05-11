@@ -101,15 +101,11 @@
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
         <action
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
             android:id="@+id/action_signInFragment_to_userFragment"
             app:destination="@id/userFragment" />
     </fragment>
     <fragment
-        tools:layout="@layout/fragment_user"
+        tools:layout="@layout/fragment_home"
         android:id="@+id/userFragment"
         android:name="com.thesis.android_challenge_w6.presentation.user.UserFragment"
         android:label="UserFragment" >
@@ -128,4 +124,7 @@
         android:id="@+id/detailFragment"
         android:name="com.thesis.android_challenge_w6.presentation.detail.DetailFragment"
         android:label="DetailFragment" />
+        android:name="com.thesis.android_challenge_w6.presentation.home.HomeFragment"
+        android:label="UserFragment" />
+
 </navigation>

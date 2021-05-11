@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="favoriteViewModel"
-            type="com.thesis.android_challenge_w6.presentation.favorite.FavoriteListViewModel" />
+            name="topRatedListViewModel"
+            type="com.thesis.android_challenge_w6.presentation.favorite.TopRatedListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_favorite_list"
+            android:id="@+id/rv_top_rated"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
