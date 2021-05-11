@@ -78,7 +78,7 @@ class NowPlayingListAdapter :
                 tvMoviesYear!!.text = movies.releaseDate
                 tvMovieOverview!!.text = movies.overview
                 Glide.with(itemView.context)
-                    .load(movies.backdropPath)
+                    .load("https://api.themoviedb.org/3"+movies.backdropPath)
                     .into(imgMovie!!)
             }
 

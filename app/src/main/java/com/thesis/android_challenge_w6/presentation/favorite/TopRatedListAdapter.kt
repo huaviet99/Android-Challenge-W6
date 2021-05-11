@@ -11,41 +11,43 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.movie.TopRatedMovies
 
-class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+class TopRatedListAdapter :
+    ListAdapter<TopRatedMovies, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
     }
 
     var isLinearSwitched = true
-    var listener : TopRatedAdapterListener? = null
+    var listener: TopRatedAdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view : View?
-        view = if(viewType == LINEAR_ITEM) {
+        val view: View?
+        view = if (viewType == LINEAR_ITEM) {
             inflater.inflate(R.layout.item_linear_movie, parent, false)
-        } else  {
+        } else {
             inflater.inflate(R.layout.item_grid_movie, parent, false)
         }
         return ViewHolder(view!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val item = getItem(position)
-        holder.bind(item,listener!!)
+        val item = getItem(position)
+        holder.bind(item, listener!!)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(isLinearSwitched){
+        return if (isLinearSwitched) {
             LINEAR_ITEM
         } else {
             GRID_ITEM
         }
     }
 
-    fun toggleItemViewType(): Boolean{
+    fun toggleItemViewType(): Boolean {
         isLinearSwitched = !isLinearSwitched
         return isLinearSwitched
     }
@@ -54,38 +56,41 @@ class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHold
         private val tvMovieName: TextView? = itemView.findViewById(R.id.tv_movie_name)
         private val tvMovieGenre: TextView? = itemView.findViewById(R.id.tv_movie_genre)
         private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
-        fun bind(restaurant: Restaurant,listener: TopRatedAdapterListener) {
+        private val tvMoviesYear: TextView? = itemView.findViewById(R.id.tv_movie_year)
+        fun bind(movies: TopRatedMovies, listener: TopRatedAdapterListener) {
             itemView.setOnClickListener {
-                listener.onItemClicked(restaurant)
+                listener.onItemClicked(movies)
             }
 
-            if(isLinearSwitched){
-                tvMovieName!!.text = restaurant.name
-                tvMovieGenre!!.text = restaurant.address
+            if (isLinearSwitched) {
+                tvMovieName!!.text = movies.title
+                tvMovieGenre!!.text = "k CO "
+                tvMoviesYear!!.text = movies.releaseDate
                 Glide.with(itemView.context)
-                    .load(restaurant.picturePath)
+                    .load("https://api.themoviedb.org/3" + movies.backdropPath)
                     .into(imgMovie!!)
             } else {
-                tvMovieName!!.text = restaurant.name
+                tvMovieName!!.text = movies.title
+                tvMoviesYear!!.text = movies.releaseDate
                 Glide.with(itemView.context)
-                    .load(restaurant.picturePath)
+                    .load("https://api.themoviedb.org/3" + movies.backdropPath)
                     .into(imgMovie!!)
             }
         }
 
     }
 
-    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<Restaurant>() {
-        override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-            return oldItem.name == newItem.name
+    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<TopRatedMovies>() {
+        override fun areItemsTheSame(oldItem: TopRatedMovies, newItem: TopRatedMovies): Boolean {
+            return oldItem.title == newItem.title
         }
 
-        override fun areContentsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
+        override fun areContentsTheSame(oldItem: TopRatedMovies, newItem: TopRatedMovies): Boolean {
             return oldItem == newItem
         }
     }
 
     interface TopRatedAdapterListener {
-        fun onItemClicked(restaurant: Restaurant)
+        fun onItemClicked(movies: TopRatedMovies)
     }
 }

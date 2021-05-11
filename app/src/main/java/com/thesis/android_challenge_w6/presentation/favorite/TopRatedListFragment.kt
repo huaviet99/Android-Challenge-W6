@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.databinding.FragmentTopRatedBinding
 import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.movie.TopRatedMovies
 import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
 class TopRatedListFragment : Fragment() {
@@ -43,7 +44,7 @@ class TopRatedListFragment : Fragment() {
         val userFragment = parentFragment as HomeFragment
         val email = userFragment.getEmailFromBundle()
         topRatedListViewModel.accessedEmail.value = email
-        topRatedListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
+        topRatedListViewModel.getTopRated().observe(viewLifecycleOwner, Observer {
             activity?.runOnUiThread {
                 topRatedListAdapter.submitList(it)
             }
@@ -66,7 +67,8 @@ class TopRatedListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                topRatedListViewModel.isLinearSwitched.value = topRatedListAdapter.toggleItemViewType()
+                topRatedListViewModel.isLinearSwitched.value =
+                    topRatedListAdapter.toggleItemViewType()
 
                 if (topRatedListViewModel.isLinearSwitched.value!!) {
                     binding.rvTopRated.layoutManager = LinearLayoutManager(activity)
@@ -101,10 +103,10 @@ class TopRatedListFragment : Fragment() {
 
         }
 
-        topRatedListAdapter.listener = object : TopRatedListAdapter.TopRatedAdapterListener{
-            override fun onItemClicked(restaurant: Restaurant) {
-                val bundle = bundleOf("restaurant" to restaurant)
-                findNavController().navigate(R.id.action_homeFragment_to_detailFragment,bundle)
+        topRatedListAdapter.listener = object : TopRatedListAdapter.TopRatedAdapterListener {
+            override fun onItemClicked(movies: TopRatedMovies) {
+                val bundle = bundleOf("topRateMovies" to movies)
+                findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
             }
         }
         binding.rvTopRated.adapter = topRatedListAdapter
