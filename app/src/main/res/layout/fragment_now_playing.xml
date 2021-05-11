@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="topViewModel"
-            type="com.thesis.android_challenge_w6.presentation.top.TopListViewModel" />
+            name="nowPlayingViewModel"
+            type="com.thesis.android_challenge_w6.presentation.now_playing.NowPlayingListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_restaurant_list"
+            android:id="@+id/rv_now_playing"
             android:layout_width="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_height="0dp"

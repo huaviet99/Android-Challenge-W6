@@ -1,20 +1,19 @@
-package com.thesis.android_challenge_w6.presentation.user
+package com.thesis.android_challenge_w6.presentation.home
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.presentation.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_user.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
-class UserFragment : Fragment() {
+class HomeFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_user, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
         return view
     }
 
@@ -38,15 +37,15 @@ class UserFragment : Fragment() {
     }
 
     private fun setupBottomNavigationView() {
-        bottom_nav_user.setOnNavigationItemSelectedListener {
+        bottom_nav_home.setOnNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.item_top -> {
-                    user_view_pager.currentItem = UserViewPagerAdapter.TOP_PAGE
+                R.id.item_now_playing -> {
+                    home_view_pager.currentItem = HomeViewPagerAdapter.TOP_PAGE
                     true
 
                 }
-                R.id.item_favorite -> {
-                    user_view_pager.currentItem = UserViewPagerAdapter.FAVORITE_PAGE
+                R.id.item_top_rated -> {
+                    home_view_pager.currentItem = HomeViewPagerAdapter.FAVORITE_PAGE
                     true
                 }
                 else -> false
@@ -55,10 +54,10 @@ class UserFragment : Fragment() {
     }
 
     private fun setupViewPager() {
-        (activity as MainActivity).supportActionBar?.title  = "Top Restaurant"
-        val mainViewPagerAdapter = UserViewPagerAdapter(childFragmentManager)
-        user_view_pager.adapter = mainViewPagerAdapter
-        user_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        (activity as MainActivity).supportActionBar?.title  = "Now Playing"
+        val mainViewPagerAdapter = HomeViewPagerAdapter(childFragmentManager)
+        home_view_pager.adapter = mainViewPagerAdapter
+        home_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
             override fun onPageScrolled(
                 position: Int,
@@ -69,18 +68,13 @@ class UserFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 when (position) {
-                    UserViewPagerAdapter.TOP_PAGE -> {
-                        bottom_nav_user.menu.findItem(R.id.item_top).isChecked = true
-                        (activity as MainActivity).supportActionBar?.title  ="Top Restaurant"
-
-
+                    HomeViewPagerAdapter.TOP_PAGE -> {
+                        bottom_nav_home.menu.findItem(R.id.item_now_playing).isChecked = true
+                        (activity as MainActivity).supportActionBar?.title  = "Now Playing"
                     }
-                    UserViewPagerAdapter.FAVORITE_PAGE -> {
-                        bottom_nav_user.menu.findItem(R.id.item_favorite).isChecked = true
-                        (activity as MainActivity).supportActionBar?.title  ="Favorite Restaurant"
-
-                        activity!!.runOnUiThread { mainViewPagerAdapter.notifyDataSetChanged() }
-
+                    HomeViewPagerAdapter.FAVORITE_PAGE -> {
+                        bottom_nav_home.menu.findItem(R.id.item_top_rated).isChecked = true
+                        (activity as MainActivity).supportActionBar?.title  = "Top Rated"
                     }
 
                 }

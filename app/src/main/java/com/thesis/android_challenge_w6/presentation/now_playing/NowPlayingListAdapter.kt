@@ -1,4 +1,4 @@
-package com.thesis.android_challenge_w6.presentation.top
+package com.thesis.android_challenge_w6.presentation.now_playing
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
@@ -18,29 +18,28 @@ import com.bumptech.glide.request.target.Target
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.model.Restaurant
 
-class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+class NowPlayingListAdapter : ListAdapter<Restaurant, NowPlayingListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
     }
 
     private var isLinearSwitched = true
-    var listener: RestaurantAdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val view: View?
         view = if (viewType == LINEAR_ITEM) {
-            inflater.inflate(R.layout.item_linear_restaurant, parent, false)
+            inflater.inflate(R.layout.item_linear_movie, parent, false)
         } else {
-            inflater.inflate(R.layout.item_grid_restaurant, parent, false)
+            inflater.inflate(R.layout.item_grid_movie, parent, false)
         }
         return ViewHolder(view!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, listener)
+        holder.bind(item)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -56,10 +55,6 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
         return isLinearSwitched
     }
 
-    override fun submitList(list: List<Restaurant>?) {
-        super.submitList(list)
-        notifyDataSetChanged()
-    }
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -67,9 +62,8 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
         private val tvRestaurantAddress: TextView =
             itemView.findViewById(R.id.tv_restaurant_address)
         private val imgRestaurant: ImageView = itemView.findViewById(R.id.img_restaurant)
-        private val imgFavoriteCheck: ImageView? = itemView.findViewById(R.id.img_favorite_check)
         private val progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar)
-        fun bind(restaurant: Restaurant, listener: RestaurantAdapterListener?) {
+        fun bind(restaurant: Restaurant) {
             tvRestaurantName.text = restaurant.name
             tvRestaurantAddress.text = restaurant.address
             Glide.with(itemView.context)
@@ -97,16 +91,6 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
                     }
                 })
                 .into(imgRestaurant)
-
-            if (restaurant.isFavorite) {
-                imgFavoriteCheck?.setImageResource(R.drawable.ic_favorite_check)
-            } else {
-                imgFavoriteCheck?.setImageResource(R.drawable.ic_favorite_uncheck)
-
-            }
-            imgFavoriteCheck?.setOnClickListener {
-                listener?.onItemClicked(restaurant)
-            }
         }
     }
 
@@ -118,10 +102,6 @@ class TopListAdapter : ListAdapter<Restaurant, TopListAdapter.ViewHolder>(Restau
         override fun areContentsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
             return oldItem == newItem
         }
-    }
-
-    interface RestaurantAdapterListener {
-        fun onItemClicked(restaurant: Restaurant)
     }
 
 }

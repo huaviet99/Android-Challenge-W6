@@ -1,7 +1,6 @@
-package com.thesis.android_challenge_w6.presentation.favorite
+package com.thesis.android_challenge_w6.presentation.now_playing
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -13,16 +12,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.databinding.FragmentFavoriteListBinding
-import com.thesis.android_challenge_w6.presentation.user.UserFragment
+import com.thesis.android_challenge_w6.databinding.FragmentNowPlayingBinding
+import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
-class FavoriteListFragment : Fragment() {
-    private lateinit var favoriteListAdapter: FavoriteListAdapter
-    private lateinit var favoriteListViewModel: FavoriteListViewModel
-    private lateinit var binding: FragmentFavoriteListBinding
+class NowPlayingListFragment : Fragment() {
+    private lateinit var nowPlayingListAdapter: NowPlayingListAdapter
+    private lateinit var nowPlayingListViewModel: NowPlayingListViewModel
+    private lateinit var binding: FragmentNowPlayingBinding
 
     private lateinit var menu: Menu
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,22 +33,20 @@ class FavoriteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("FavoriteLs", "onViewCreated")
         setupRecyclerView()
         setHasOptionsMenu(true)
-        val userFragment = parentFragment as UserFragment
+        val userFragment = parentFragment as HomeFragment
         val email = userFragment.getEmailFromBundle()
-        favoriteListViewModel.accessedEmail.value = email
-        favoriteListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
+        nowPlayingListViewModel.accessedEmail.value = email
+        nowPlayingListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
             activity?.runOnUiThread {
-                favoriteListAdapter.submitList(it)
+                nowPlayingListAdapter.submitList(it)
             }
         })
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_user, menu)
+        inflater.inflate(R.menu.menu_home, menu)
         this.menu = menu
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -58,14 +54,13 @@ class FavoriteListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                showToastMessage("Favorite Clicked")
-                val isLinearSwitched: Boolean = favoriteListAdapter.toggleItemViewType()
+                val isLinearSwitched: Boolean = nowPlayingListAdapter.toggleItemViewType()
 
                 if (isLinearSwitched) {
-                    binding.rvFavoriteList.layoutManager = LinearLayoutManager(activity)
+                    binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
                     menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_grid)
                 } else {
-                    binding.rvFavoriteList.layoutManager = GridLayoutManager(activity, 2)
+                    binding.rvNowPlaying.layoutManager = GridLayoutManager(activity, 2)
                     menu[0].icon =
                         ContextCompat.getDrawable(requireActivity(), R.drawable.ic_linear)
                 }
@@ -75,19 +70,19 @@ class FavoriteListFragment : Fragment() {
         return false
     }
 
-
     private fun setupViewModel(inflater: LayoutInflater, container: ViewGroup?) {
-        favoriteListViewModel = ViewModelProvider(this).get(FavoriteListViewModel::class.java)
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_list, container, false)
+        nowPlayingListViewModel = ViewModelProvider(this).get(NowPlayingListViewModel::class.java)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_now_playing, container, false)
         binding.lifecycleOwner = this
-        binding.favoriteViewModel = favoriteListViewModel
+        binding.nowPlayingViewModel = nowPlayingListViewModel
     }
+
 
     private fun setupRecyclerView() {
-        favoriteListAdapter = FavoriteListAdapter()
-        binding.rvFavoriteList.adapter = favoriteListAdapter
+        nowPlayingListAdapter = NowPlayingListAdapter()
+        binding.rvNowPlaying.adapter = nowPlayingListAdapter
     }
+
 
     private fun showToastMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()

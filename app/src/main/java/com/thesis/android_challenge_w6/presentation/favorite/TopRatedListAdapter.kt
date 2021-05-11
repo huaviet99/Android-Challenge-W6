@@ -18,7 +18,7 @@ import com.bumptech.glide.request.target.Target
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.model.Restaurant
 
-class FavoriteListAdapter : ListAdapter<Restaurant, FavoriteListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
@@ -31,9 +31,9 @@ class FavoriteListAdapter : ListAdapter<Restaurant, FavoriteListAdapter.ViewHold
         val inflater = LayoutInflater.from(parent.context)
         val view : View?
         view = if(viewType == LINEAR_ITEM) {
-            inflater.inflate(R.layout.item_linear_restaurant, parent, false)
+            inflater.inflate(R.layout.item_linear_movie, parent, false)
         } else  {
-            inflater.inflate(R.layout.item_grid_restaurant, parent, false)
+            inflater.inflate(R.layout.item_grid_movie, parent, false)
         }
         return ViewHolder(view!!)
     }

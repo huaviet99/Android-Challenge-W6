@@ -5,7 +5,6 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.thesis.android_challenge_w6.R
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_user.*
 
 class MainActivity: AppCompatActivity() {
 

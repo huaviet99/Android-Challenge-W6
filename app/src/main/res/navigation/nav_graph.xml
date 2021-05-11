@@ -105,9 +105,9 @@
             app:destination="@id/userFragment" />
     </fragment>
     <fragment
-        tools:layout="@layout/fragment_user"
+        tools:layout="@layout/fragment_home"
         android:id="@+id/userFragment"
-        android:name="com.thesis.android_challenge_w6.presentation.user.UserFragment"
+        android:name="com.thesis.android_challenge_w6.presentation.home.HomeFragment"
         android:label="UserFragment" />
 
 </navigation>

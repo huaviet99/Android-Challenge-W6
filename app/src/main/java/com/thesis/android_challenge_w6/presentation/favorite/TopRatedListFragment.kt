@@ -1,6 +1,7 @@
-package com.thesis.android_challenge_w6.presentation.top
+package com.thesis.android_challenge_w6.presentation.favorite
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -12,16 +13,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.databinding.FragmentTopListBinding
-import com.thesis.android_challenge_w6.model.Restaurant
-import com.thesis.android_challenge_w6.presentation.user.UserFragment
+import com.thesis.android_challenge_w6.databinding.FragmentFavoriteListBinding
+import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
-class TopListFragment : Fragment() {
-    private lateinit var topListAdapter: TopListAdapter
-    private lateinit var topListViewModel: TopListViewModel
-    private lateinit var binding: FragmentTopListBinding
+class TopRatedListFragment : Fragment() {
+    private lateinit var topRatedListAdapter: TopRatedListAdapter
+    private lateinit var topRatedListViewModel: TopRatedListViewModel
+    private lateinit var binding: FragmentFavoriteListBinding
 
     private lateinit var menu: Menu
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,20 +35,22 @@ class TopListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("FavoriteLs", "onViewCreated")
         setupRecyclerView()
         setHasOptionsMenu(true)
-        val userFragment = parentFragment as UserFragment
+        val userFragment = parentFragment as HomeFragment
         val email = userFragment.getEmailFromBundle()
-        topListViewModel.accessedEmail.value = email
-        topListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
+        topRatedListViewModel.accessedEmail.value = email
+        topRatedListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
             activity?.runOnUiThread {
-                topListAdapter.submitList(it)
+                topRatedListAdapter.submitList(it)
             }
         })
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_user, menu)
+        inflater.inflate(R.menu.menu_home, menu)
         this.menu = menu
         super.onCreateOptionsMenu(menu, inflater)
     }
@@ -55,14 +58,13 @@ class TopListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                showToastMessage("Top Clicked")
-                val isLinearSwitched: Boolean = topListAdapter.toggleItemViewType()
+                val isLinearSwitched: Boolean = topRatedListAdapter.toggleItemViewType()
 
                 if (isLinearSwitched) {
-                    binding.rvRestaurantList.layoutManager = LinearLayoutManager(activity)
+                    binding.rvTopRated.layoutManager = LinearLayoutManager(activity)
                     menu[0].icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_grid)
                 } else {
-                    binding.rvRestaurantList.layoutManager = GridLayoutManager(activity, 2)
+                    binding.rvTopRated.layoutManager = GridLayoutManager(activity, 2)
                     menu[0].icon =
                         ContextCompat.getDrawable(requireActivity(), R.drawable.ic_linear)
                 }
@@ -72,24 +74,19 @@ class TopListFragment : Fragment() {
         return false
     }
 
-    private fun setupViewModel(inflater: LayoutInflater, container: ViewGroup?) {
-        topListViewModel = ViewModelProvider(this).get(TopListViewModel::class.java)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_top_list, container, false)
-        binding.lifecycleOwner = this
-        binding.topViewModel = topListViewModel
-    }
 
+    private fun setupViewModel(inflater: LayoutInflater, container: ViewGroup?) {
+        topRatedListViewModel = ViewModelProvider(this).get(TopRatedListViewModel::class.java)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_favorite_list, container, false)
+        binding.lifecycleOwner = this
+        binding.topRatedListViewModel = topRatedListViewModel
+    }
 
     private fun setupRecyclerView() {
-        topListAdapter = TopListAdapter()
-        topListAdapter.listener = object : TopListAdapter.RestaurantAdapterListener {
-            override fun onItemClicked(restaurant: Restaurant) {
-                topListViewModel.toggleFavoriteRestaurant(restaurant)
-            }
-        }
-        binding.rvRestaurantList.adapter = topListAdapter
+        topRatedListAdapter = TopRatedListAdapter()
+        binding.rvTopRated.adapter = topRatedListAdapter
     }
-
 
     private fun showToastMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
