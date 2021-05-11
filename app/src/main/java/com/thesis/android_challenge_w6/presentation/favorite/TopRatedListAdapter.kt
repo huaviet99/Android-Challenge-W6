@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -18,6 +19,7 @@ class TopRatedListAdapter :
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
+        const val URL_IMAGE = "https://image.tmdb.org/t/p/w500"
     }
 
     var isLinearSwitched = true
@@ -54,9 +56,9 @@ class TopRatedListAdapter :
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvMovieName: TextView? = itemView.findViewById(R.id.tv_movie_name)
-        private val tvMovieGenre: TextView? = itemView.findViewById(R.id.tv_movie_genre)
         private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
         private val tvMoviesYear: TextView? = itemView.findViewById(R.id.tv_movie_year)
+        private val tvRatingBar : RatingBar? = itemView.findViewById(R.id.rating_bar)
         fun bind(movies: TopRatedMovies, listener: TopRatedAdapterListener) {
             itemView.setOnClickListener {
                 listener.onItemClicked(movies)
@@ -64,16 +66,17 @@ class TopRatedListAdapter :
 
             if (isLinearSwitched) {
                 tvMovieName!!.text = movies.title
-                tvMovieGenre!!.text = "k CO "
                 tvMoviesYear!!.text = movies.releaseDate
+                tvRatingBar!!.rating = (movies.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load("https://api.themoviedb.org/3" + movies.backdropPath)
+                    .load(URL_IMAGE + movies.posterPath)
                     .into(imgMovie!!)
             } else {
                 tvMovieName!!.text = movies.title
                 tvMoviesYear!!.text = movies.releaseDate
+                tvRatingBar!!.rating = (movies.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load("https://api.themoviedb.org/3" + movies.backdropPath)
+                    .load(URL_IMAGE + movies.posterPath)
                     .into(imgMovie!!)
             }
         }
