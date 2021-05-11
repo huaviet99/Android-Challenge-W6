@@ -23,7 +23,7 @@ class TopRatedListViewModel : ViewModel(){
 
     fun getTopRated(){
         viewModelScope.launch {
-            val topRatedMoviesResp = RestClient.getInstance().API.listTopRatedMovies(language = "en-US", page = 1, apiKey = "7519cb3f829ecd53bd9b7007076dbe23")
+            val topRatedMoviesResp = RestClient.getInstance().API.listTopRatedMovies(language = "en-US", page = 1)
             Log.e("Top Rated", topRatedMoviesResp.results.toString())
         }
     }
