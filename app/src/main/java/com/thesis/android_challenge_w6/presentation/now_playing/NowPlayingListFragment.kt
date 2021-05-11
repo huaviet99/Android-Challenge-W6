@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.databinding.FragmentNowPlayingBinding
 import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.movie.NowPlayingMovies
 import com.thesis.android_challenge_w6.presentation.favorite.TopRatedListAdapter
 import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
@@ -42,11 +43,8 @@ class NowPlayingListFragment : Fragment() {
         val userFragment = parentFragment as HomeFragment
         val email = userFragment.getEmailFromBundle()
         nowPlayingListViewModel.accessedEmail.value = email
-        nowPlayingListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
-            activity?.runOnUiThread {
-                nowPlayingListAdapter.submitList(it)
-            }
-        })
+
+        fetchNowPlaying()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -64,7 +62,8 @@ class NowPlayingListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                nowPlayingListViewModel.isLinearSwitched.value = nowPlayingListAdapter.toggleItemViewType()
+                nowPlayingListViewModel.isLinearSwitched.value =
+                    nowPlayingListAdapter.toggleItemViewType()
 
                 if (nowPlayingListViewModel.isLinearSwitched.value!!) {
                     binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
@@ -99,14 +98,21 @@ class NowPlayingListFragment : Fragment() {
 
         }
         nowPlayingListAdapter.listener = object : NowPlayingListAdapter.NowPlayingAdapterListener {
-            override fun onItemClicked(restaurant: Restaurant) {
-                val bundle = bundleOf("restaurant" to restaurant)
+            override fun onItemClicked(movies: NowPlayingMovies) {
+                val bundle = bundleOf("movies" to movies)
                 findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
             }
         }
         binding.rvNowPlaying.adapter = nowPlayingListAdapter
     }
 
+    private fun fetchNowPlaying() {
+        nowPlayingListViewModel.getNowPlaying().observe(viewLifecycleOwner, Observer {
+            activity?.runOnUiThread {
+                nowPlayingListAdapter.submitList(it)
+            }
+        })
+    }
 
     private fun showToastMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
