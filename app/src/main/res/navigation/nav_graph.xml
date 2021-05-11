@@ -107,6 +107,23 @@
     <fragment
         tools:layout="@layout/fragment_home"
         android:id="@+id/userFragment"
+        android:name="com.thesis.android_challenge_w6.presentation.user.UserFragment"
+        android:label="UserFragment" >
+        <action
+            app:popUpTo="@+id/nav_graph"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_userFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_detail"
+        android:id="@+id/detailFragment"
+        android:name="com.thesis.android_challenge_w6.presentation.detail.DetailFragment"
+        android:label="DetailFragment" />
         android:name="com.thesis.android_challenge_w6.presentation.home.HomeFragment"
         android:label="UserFragment" />
 
