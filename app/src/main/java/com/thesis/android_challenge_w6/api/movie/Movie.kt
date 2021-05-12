@@ -1,8 +1,8 @@
-package com.thesis.android_challenge_w6.movie
+package com.thesis.android_challenge_w6.api.movie
 
 import com.google.gson.annotations.SerializedName
 
-data class NowPlayingMovies (
+data class Movie (
     val adult: Boolean? = null,
 
     @SerializedName("backdrop_path")
