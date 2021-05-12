@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillViewport="true">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/imgMovie"
@@ -56,10 +56,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.25"
-            android:gravity="end"
             android:text="Censorship"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/orange"
             android:layout_marginTop="@dimen/distance_20dp"
             android:layout_marginStart="@dimen/distance_20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,6 +69,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.55"
             android:text="Above 18 "
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:layout_marginTop="@dimen/distance_20dp"
             android:layout_marginStart="@dimen/distance_20dp"
@@ -82,10 +81,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.25"
-            android:gravity="end"
             android:text="Popularity"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/orange"
             android:layout_marginStart="@dimen/distance_20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtCensorshipValue"
@@ -95,6 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.55"
+            android:textAlignment="center"
             android:text="12345"
             android:textColor="@color/black"
             android:layout_marginStart="@dimen/distance_20dp"
@@ -106,10 +104,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.25"
-            android:gravity="end"
             android:text="Release Date"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/orange"
             android:layout_marginStart="@dimen/distance_20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtPopularityValue"
@@ -117,6 +113,7 @@
         <TextView
             android:id="@+id/txtReleaseDateValue"
             android:layout_width="0dp"
+            android:textAlignment="center"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.55"
             android:layout_marginStart="@dimen/distance_20dp"
@@ -130,34 +127,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.25"
-            android:gravity="end"
             android:text="Average Vote"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/orange"
             android:layout_marginStart="@dimen/distance_20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtReleaseDateValue"
-            app:layout_constraintEnd_toStartOf="@id/txtAverageVoteValue"/>
-        <TextView
-            android:id="@+id/txtAverageVoteValue"
-            android:layout_width="0dp"
+            app:layout_constraintTop_toBottomOf="@id/txtReleaseDateValue" />
+
+        <RatingBar
+            android:id="@+id/rating_bar"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintWidth_percent="0.55"
-            android:layout_marginStart="@dimen/distance_20dp"
-            android:layout_marginEnd="@dimen/distance_20dp"
+            android:layout_marginTop="2dp"
+            android:max="5"
+            android:rating="3.5"
+            android:theme="@style/RatingBar"
+            app:layout_constraintEnd_toEndOf="@+id/txtReleaseDateValue"
+            app:layout_constraintStart_toStartOf="@+id/txtReleaseDateValue"
+            app:layout_constraintTop_toBottomOf="@id/txtReleaseDate" />
+        <TextView
+
+            android:id="@+id/txtAverageVoteValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/distance_5dp"
             android:text="6.5/10"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/txtReleaseDateValue"
-            app:layout_constraintStart_toEndOf="@+id/txtAverageVote"/>
+            app:layout_constraintStart_toEndOf="@+id/rating_bar"/>
         <TextView
             android:id="@+id/txtVoteCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.25"
-            android:gravity="end"
             android:text="Vote Count"
-            android:textColor="@color/black"
-            android:textStyle="bold"
+            android:textColor="@color/orange"
             android:layout_marginStart="@dimen/distance_20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtAverageVoteValue"
@@ -165,6 +169,7 @@
         <TextView
             android:id="@+id/txtVoteCountValue"
             android:layout_width="0dp"
+            android:textAlignment="center"
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="0.55"
             android:layout_marginStart="@dimen/distance_20dp"
