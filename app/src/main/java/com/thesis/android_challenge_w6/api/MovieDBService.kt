@@ -1,8 +1,8 @@
-package com.thesis.android_challenge_w6.rest
+package com.thesis.android_challenge_w6.api
 
 
-import com.thesis.android_challenge_w6.movie.NowPlayingMoviesResp
-import com.thesis.android_challenge_w6.movie.TopRatedMoviesResp
+import com.thesis.android_challenge_w6.api.movie.NowPlayingMoviesResp
+import com.thesis.android_challenge_w6.api.movie.TopRatedMoviesResp
 import retrofit2.http.GET
 import retrofit2.http.Query
 

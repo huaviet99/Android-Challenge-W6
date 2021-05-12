@@ -1,8 +1,11 @@
-package com.thesis.android_challenge_w6.movie
+package com.thesis.android_challenge_w6.api.movie
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-data class NowPlayingMovies (
+@Parcelize
+data class Movie (
     val adult: Boolean? = null,
 
     @SerializedName("backdrop_path")
@@ -34,7 +37,7 @@ data class NowPlayingMovies (
     @SerializedName("vote_count")
     val voteCount: Long? = null
 
-)
+) : Parcelable
 
 enum class OriginalLanguage {
     En,

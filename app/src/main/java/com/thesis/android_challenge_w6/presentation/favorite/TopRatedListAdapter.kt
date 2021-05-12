@@ -11,11 +11,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.model.Restaurant
-import com.thesis.android_challenge_w6.movie.TopRatedMovies
+import com.thesis.android_challenge_w6.api.movie.Movie
 
 class TopRatedListAdapter :
-    ListAdapter<TopRatedMovies, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+    ListAdapter<Movie, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
@@ -59,41 +58,43 @@ class TopRatedListAdapter :
         private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
         private val tvMoviesYear: TextView? = itemView.findViewById(R.id.tv_movie_year)
         private val tvRatingBar : RatingBar? = itemView.findViewById(R.id.rating_bar)
-        fun bind(movies: TopRatedMovies, listener: TopRatedAdapterListener) {
+        private val tvMovieOverview: TextView? = itemView.findViewById(R.id.tv_movie_overview)
+        fun bind(movie: Movie, listener: TopRatedAdapterListener) {
             itemView.setOnClickListener {
-                listener.onItemClicked(movies)
+                listener.onItemClicked(movie)
             }
 
             if (isLinearSwitched) {
-                tvMovieName!!.text = movies.title
-                tvMoviesYear!!.text = movies.releaseDate
-                tvRatingBar!!.rating = (movies.voteAverage!!.toFloat() / 10) * 5
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvMovieOverview!!.text = movie.overview
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(URL_IMAGE + movies.posterPath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             } else {
-                tvMovieName!!.text = movies.title
-                tvMoviesYear!!.text = movies.releaseDate
-                tvRatingBar!!.rating = (movies.voteAverage!!.toFloat() / 10) * 5
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(URL_IMAGE + movies.posterPath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             }
         }
 
     }
 
-    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<TopRatedMovies>() {
-        override fun areItemsTheSame(oldItem: TopRatedMovies, newItem: TopRatedMovies): Boolean {
+    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem.title == newItem.title
         }
 
-        override fun areContentsTheSame(oldItem: TopRatedMovies, newItem: TopRatedMovies): Boolean {
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem == newItem
         }
     }
 
     interface TopRatedAdapterListener {
-        fun onItemClicked(movies: TopRatedMovies)
+        fun onItemClicked(movie: Movie)
     }
 }

@@ -11,6 +11,7 @@
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:foreground="@drawable/item_ripple_effect"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -43,17 +44,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="Textview"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toEndOf="@+id/img_movie"
                 app:layout_constraintTop_toBottomOf="@id/tv_movie_name" />
 
             <RatingBar
                 android:id="@+id/rating_bar"
+
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:max="5"
                 android:rating="3.5"
+                android:theme="@style/RatingBar"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_movie_year"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_movie_name" />
@@ -63,9 +67,10 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="10dp"
                 android:maxLines="8"
                 android:text="overview content"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/img_movie"

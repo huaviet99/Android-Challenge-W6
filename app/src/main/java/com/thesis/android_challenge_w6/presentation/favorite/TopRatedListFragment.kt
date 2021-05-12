@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,9 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
+import com.thesis.android_challenge_w6.api.movie.Movie
 import com.thesis.android_challenge_w6.databinding.FragmentTopRatedBinding
-import com.thesis.android_challenge_w6.model.Restaurant
-import com.thesis.android_challenge_w6.movie.TopRatedMovies
 import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
 class TopRatedListFragment : Fragment() {
@@ -41,9 +41,6 @@ class TopRatedListFragment : Fragment() {
         Log.d("FavoriteLs", "onViewCreated")
         setupRecyclerView()
         setHasOptionsMenu(true)
-        val userFragment = parentFragment as HomeFragment
-        val email = userFragment.getEmailFromBundle()
-        topRatedListViewModel.accessedEmail.value = email
         topRatedListViewModel.getTopRated().observe(viewLifecycleOwner, Observer {
             activity?.runOnUiThread {
                 topRatedListAdapter.submitList(it)
@@ -104,9 +101,14 @@ class TopRatedListFragment : Fragment() {
         }
 
         topRatedListAdapter.listener = object : TopRatedListAdapter.TopRatedAdapterListener {
-            override fun onItemClicked(movies: TopRatedMovies) {
-                val bundle = bundleOf("topRateMovies" to movies)
-                findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
+            override fun onItemClicked(movie: Movie) {
+                ViewCompat.postOnAnimationDelayed(view!!, // Delay to show ripple effect
+                    Runnable {
+                        val bundle = bundleOf("movie" to movie)
+                        findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
+                    }
+                    ,50)
+
             }
         }
         binding.rvTopRated.adapter = topRatedListAdapter

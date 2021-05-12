@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.movie.NowPlayingMovies
+import com.thesis.android_challenge_w6.api.movie.Movie
 
 class NowPlayingListAdapter :
-    ListAdapter<NowPlayingMovies, NowPlayingListAdapter.ViewHolder>(NowPlayingMoviesDiffUtilCallback()) {
+    ListAdapter<Movie, NowPlayingListAdapter.ViewHolder>(NowPlayingMoviesDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
@@ -62,48 +62,48 @@ class NowPlayingListAdapter :
         private val tvMoviesYear: TextView? = itemView.findViewById(R.id.tv_movie_year)
         private val tvMovieOverview: TextView? = itemView.findViewById(R.id.tv_movie_overview)
         private val tvRatingBar: RatingBar? = itemView.findViewById(R.id.rating_bar)
-        fun bind(movies: NowPlayingMovies, listener: NowPlayingAdapterListener) {
+        fun bind(movie: Movie, listener: NowPlayingAdapterListener) {
             itemView.setOnClickListener {
-                listener.onItemClicked(movies)
+                listener.onItemClicked(movie)
             }
 
             if (isLinearSwitched) {
-                tvMovieName!!.text = movies.title
-                tvMoviesYear!!.text = movies.releaseDate
-                tvMovieOverview!!.text = movies.overview
-                tvRatingBar!!.rating = (movies.voteAverage!!.toFloat() / 10) * 5
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvMovieOverview!!.text = movie.overview
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(URL_IMAGE + movies.posterPath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             } else {
-                tvMovieName!!.text = movies.title
-                tvMoviesYear!!.text = movies.releaseDate
-                tvRatingBar!!.rating = (movies.voteAverage!!.toFloat() / 10) * 5
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(URL_IMAGE + movies.posterPath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             }
 
         }
     }
 
-    class NowPlayingMoviesDiffUtilCallback : DiffUtil.ItemCallback<NowPlayingMovies>() {
+    class NowPlayingMoviesDiffUtilCallback : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(
-            oldItem: NowPlayingMovies,
-            newItem: NowPlayingMovies
+            oldItem: Movie,
+            newItem: Movie
         ): Boolean {
             return oldItem.title == newItem.title
         }
 
         override fun areContentsTheSame(
-            oldItem: NowPlayingMovies,
-            newItem: NowPlayingMovies
+            oldItem: Movie,
+            newItem: Movie
         ): Boolean {
             return oldItem == newItem
         }
     }
 
     interface NowPlayingAdapterListener {
-        fun onItemClicked(movies: NowPlayingMovies)
+        fun onItemClicked(movie: Movie)
     }
 }
