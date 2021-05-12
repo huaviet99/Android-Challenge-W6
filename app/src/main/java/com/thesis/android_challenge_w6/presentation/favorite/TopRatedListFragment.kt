@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,8 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
+import com.thesis.android_challenge_w6.api.movie.Movie
 import com.thesis.android_challenge_w6.databinding.FragmentTopRatedBinding
-import com.thesis.android_challenge_w6.model.Restaurant
 import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
 class TopRatedListFragment : Fragment() {
@@ -40,10 +41,7 @@ class TopRatedListFragment : Fragment() {
         Log.d("FavoriteLs", "onViewCreated")
         setupRecyclerView()
         setHasOptionsMenu(true)
-        val userFragment = parentFragment as HomeFragment
-        val email = userFragment.getEmailFromBundle()
-        topRatedListViewModel.accessedEmail.value = email
-        topRatedListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
+        topRatedListViewModel.getTopRated().observe(viewLifecycleOwner, Observer {
             activity?.runOnUiThread {
                 topRatedListAdapter.submitList(it)
             }
@@ -66,7 +64,8 @@ class TopRatedListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                topRatedListViewModel.isLinearSwitched.value = topRatedListAdapter.toggleItemViewType()
+                topRatedListViewModel.isLinearSwitched.value =
+                    topRatedListAdapter.toggleItemViewType()
 
                 if (topRatedListViewModel.isLinearSwitched.value!!) {
                     binding.rvTopRated.layoutManager = LinearLayoutManager(activity)
@@ -101,10 +100,15 @@ class TopRatedListFragment : Fragment() {
 
         }
 
-        topRatedListAdapter.listener = object : TopRatedListAdapter.TopRatedAdapterListener{
-            override fun onItemClicked(restaurant: Restaurant) {
-                val bundle = bundleOf("restaurant" to restaurant)
-                findNavController().navigate(R.id.action_homeFragment_to_detailFragment,bundle)
+        topRatedListAdapter.listener = object : TopRatedListAdapter.TopRatedAdapterListener {
+            override fun onItemClicked(movie: Movie) {
+                ViewCompat.postOnAnimationDelayed(view!!, // Delay to show ripple effect
+                    Runnable {
+                        val bundle = bundleOf("movie" to movie)
+                        findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
+                    }
+                    ,50)
+
             }
         }
         binding.rvTopRated.adapter = topRatedListAdapter

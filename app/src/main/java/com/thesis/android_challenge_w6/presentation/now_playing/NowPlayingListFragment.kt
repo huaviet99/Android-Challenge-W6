@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,9 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
+import com.thesis.android_challenge_w6.api.movie.Movie
 import com.thesis.android_challenge_w6.databinding.FragmentNowPlayingBinding
-import com.thesis.android_challenge_w6.model.Restaurant
-import com.thesis.android_challenge_w6.presentation.favorite.TopRatedListAdapter
 import com.thesis.android_challenge_w6.presentation.home.HomeFragment
 
 class NowPlayingListFragment : Fragment() {
@@ -39,14 +39,7 @@ class NowPlayingListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setHasOptionsMenu(true)
-        val userFragment = parentFragment as HomeFragment
-        val email = userFragment.getEmailFromBundle()
-        nowPlayingListViewModel.accessedEmail.value = email
-        nowPlayingListViewModel.fetchRestaurantList().observe(viewLifecycleOwner, Observer {
-            activity?.runOnUiThread {
-                nowPlayingListAdapter.submitList(it)
-            }
-        })
+        fetchNowPlaying()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -64,7 +57,8 @@ class NowPlayingListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.item_grid -> {
-                nowPlayingListViewModel.isLinearSwitched.value = nowPlayingListAdapter.toggleItemViewType()
+                nowPlayingListViewModel.isLinearSwitched.value =
+                    nowPlayingListAdapter.toggleItemViewType()
 
                 if (nowPlayingListViewModel.isLinearSwitched.value!!) {
                     binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
@@ -99,14 +93,26 @@ class NowPlayingListFragment : Fragment() {
 
         }
         nowPlayingListAdapter.listener = object : NowPlayingListAdapter.NowPlayingAdapterListener {
-            override fun onItemClicked(restaurant: Restaurant) {
-                val bundle = bundleOf("restaurant" to restaurant)
-                findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
+            override fun onItemClicked(movie: Movie) {
+                ViewCompat.postOnAnimationDelayed(view!!, // Delay to show ripple effect
+                    Runnable {
+                        val bundle = bundleOf("movie" to movie)
+                        findNavController().navigate(R.id.action_homeFragment_to_detailFragment, bundle)
+                    }
+                    ,50)
+
             }
         }
         binding.rvNowPlaying.adapter = nowPlayingListAdapter
     }
 
+    private fun fetchNowPlaying() {
+        nowPlayingListViewModel.getNowPlaying().observe(viewLifecycleOwner, Observer {
+            activity?.runOnUiThread {
+                nowPlayingListAdapter.submitList(it)
+            }
+        })
+    }
 
     private fun showToastMessage(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()

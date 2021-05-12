@@ -4,24 +4,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.api.movie.Movie
 
 class NowPlayingListAdapter :
-    ListAdapter<Restaurant, NowPlayingListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+    ListAdapter<Movie, NowPlayingListAdapter.ViewHolder>(NowPlayingMoviesDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
+        const val URL_IMAGE = "https://image.tmdb.org/t/p/w500"
+
     }
 
     var listener: NowPlayingAdapterListener? = null
 
-     var isLinearSwitched = true
+    var isLinearSwitched = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -55,40 +58,52 @@ class NowPlayingListAdapter :
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvMovieName: TextView? = itemView.findViewById(R.id.tv_movie_name)
-        private val tvMovieGenre: TextView? = itemView.findViewById(R.id.tv_movie_genre)
         private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
-        fun bind(restaurant: Restaurant, listener: NowPlayingAdapterListener) {
+        private val tvMoviesYear: TextView? = itemView.findViewById(R.id.tv_movie_year)
+        private val tvMovieOverview: TextView? = itemView.findViewById(R.id.tv_movie_overview)
+        private val tvRatingBar: RatingBar? = itemView.findViewById(R.id.rating_bar)
+        fun bind(movie: Movie, listener: NowPlayingAdapterListener) {
             itemView.setOnClickListener {
-                listener.onItemClicked(restaurant)
+                listener.onItemClicked(movie)
             }
 
             if (isLinearSwitched) {
-                tvMovieName!!.text = restaurant.name
-                tvMovieGenre!!.text = restaurant.address
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvMovieOverview!!.text = movie.overview
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(restaurant.picturePath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             } else {
-                tvMovieName!!.text = restaurant.name
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(restaurant.picturePath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             }
 
         }
     }
 
-    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<Restaurant>() {
-        override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-            return oldItem.name == newItem.name
+    class NowPlayingMoviesDiffUtilCallback : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(
+            oldItem: Movie,
+            newItem: Movie
+        ): Boolean {
+            return oldItem.title == newItem.title
         }
 
-        override fun areContentsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
+        override fun areContentsTheSame(
+            oldItem: Movie,
+            newItem: Movie
+        ): Boolean {
             return oldItem == newItem
         }
     }
 
     interface NowPlayingAdapterListener {
-        fun onItemClicked(restaurant: Restaurant)
+        fun onItemClicked(movie: Movie)
     }
 }

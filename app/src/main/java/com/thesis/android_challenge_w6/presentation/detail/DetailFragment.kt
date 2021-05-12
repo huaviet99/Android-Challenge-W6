@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.api.movie.Movie
 import com.thesis.android_challenge_w6.presentation.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,14 +21,14 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).appBarLayout?.visibility  = View.GONE
-        val data = getEmailFromBundle()
+        val data = getDataFromBundle()
         data?.let {
             Log.d("Test",data.toString())
         }
     }
 
-    private fun getEmailFromBundle(): Restaurant? {
-        return arguments?.getParcelable("restaurant")
+    private fun getDataFromBundle(): Movie? {
+        return arguments?.getParcelable("movies")
     }
 
 

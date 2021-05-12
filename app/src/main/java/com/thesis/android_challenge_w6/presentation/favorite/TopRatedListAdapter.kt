@@ -4,88 +4,97 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thesis.android_challenge_w6.R
-import com.thesis.android_challenge_w6.model.Restaurant
+import com.thesis.android_challenge_w6.api.movie.Movie
 
-class TopRatedListAdapter : ListAdapter<Restaurant, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
+class TopRatedListAdapter :
+    ListAdapter<Movie, TopRatedListAdapter.ViewHolder>(RestaurantDiffUtilCallback()) {
     companion object {
         const val LINEAR_ITEM = 0
         const val GRID_ITEM = 1
+        const val URL_IMAGE = "https://image.tmdb.org/t/p/w500"
     }
 
     var isLinearSwitched = true
-    var listener : TopRatedAdapterListener? = null
+    var listener: TopRatedAdapterListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view : View?
-        view = if(viewType == LINEAR_ITEM) {
+        val view: View?
+        view = if (viewType == LINEAR_ITEM) {
             inflater.inflate(R.layout.item_linear_movie, parent, false)
-        } else  {
+        } else {
             inflater.inflate(R.layout.item_grid_movie, parent, false)
         }
         return ViewHolder(view!!)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       val item = getItem(position)
-        holder.bind(item,listener!!)
+        val item = getItem(position)
+        holder.bind(item, listener!!)
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(isLinearSwitched){
+        return if (isLinearSwitched) {
             LINEAR_ITEM
         } else {
             GRID_ITEM
         }
     }
 
-    fun toggleItemViewType(): Boolean{
+    fun toggleItemViewType(): Boolean {
         isLinearSwitched = !isLinearSwitched
         return isLinearSwitched
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvMovieName: TextView? = itemView.findViewById(R.id.tv_movie_name)
-        private val tvMovieGenre: TextView? = itemView.findViewById(R.id.tv_movie_genre)
         private val imgMovie: ImageView? = itemView.findViewById(R.id.img_movie)
-        fun bind(restaurant: Restaurant,listener: TopRatedAdapterListener) {
+        private val tvMoviesYear: TextView? = itemView.findViewById(R.id.tv_movie_year)
+        private val tvRatingBar : RatingBar? = itemView.findViewById(R.id.rating_bar)
+        private val tvMovieOverview: TextView? = itemView.findViewById(R.id.tv_movie_overview)
+        fun bind(movie: Movie, listener: TopRatedAdapterListener) {
             itemView.setOnClickListener {
-                listener.onItemClicked(restaurant)
+                listener.onItemClicked(movie)
             }
 
-            if(isLinearSwitched){
-                tvMovieName!!.text = restaurant.name
-                tvMovieGenre!!.text = restaurant.address
+            if (isLinearSwitched) {
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvMovieOverview!!.text = movie.overview
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(restaurant.picturePath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             } else {
-                tvMovieName!!.text = restaurant.name
+                tvMovieName!!.text = movie.title
+                tvMoviesYear!!.text = movie.releaseDate
+                tvRatingBar!!.rating = (movie.voteAverage!!.toFloat() / 10) * 5
                 Glide.with(itemView.context)
-                    .load(restaurant.picturePath)
+                    .load(URL_IMAGE + movie.posterPath)
                     .into(imgMovie!!)
             }
         }
 
     }
 
-    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<Restaurant>() {
-        override fun areItemsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
-            return oldItem.name == newItem.name
+    class RestaurantDiffUtilCallback : DiffUtil.ItemCallback<Movie>() {
+        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            return oldItem.title == newItem.title
         }
 
-        override fun areContentsTheSame(oldItem: Restaurant, newItem: Restaurant): Boolean {
+        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
             return oldItem == newItem
         }
     }
 
     interface TopRatedAdapterListener {
-        fun onItemClicked(restaurant: Restaurant)
+        fun onItemClicked(movie: Movie)
     }
 }

@@ -1,6 +1,5 @@
-package com.thesis.android_challenge_w6.rest
+package com.thesis.android_challenge_w6.api
 
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -22,7 +21,7 @@ class RestClient {
         }
     }
 
-    private fun createMovieDBService() : MovieDBService{
+    private fun createMovieDBService() : MovieDBService {
 
         //create retrofit
         val retrofit: Retrofit = Retrofit.Builder()

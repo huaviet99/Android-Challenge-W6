@@ -13,6 +13,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:foreground="@drawable/item_ripple_effect"
             android:paddingBottom="10dp">
 
 
@@ -39,9 +40,11 @@
                 app:layout_constraintTop_toBottomOf="@id/img_movie" />
 
             <TextView
+                android:textColor="@color/black"
                 android:id="@+id/tv_movie_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="5dp"
                 android:text="Textview"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -53,8 +56,10 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
                 android:max="5"
                 android:rating="3.5"
+                android:theme="@style/RatingBar"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_movie_year"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_movie_year" />
