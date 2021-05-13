@@ -1,5 +1,7 @@
 package com.thesis.android_challenge_w6.api
 
+import com.thesis.android_challenge_w6.AuthenticationInterceptor
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -23,10 +25,16 @@ class RestClient {
 
     private fun createMovieDBService() : MovieDBService {
 
+        //create Okhttp
+        val httpClient = OkHttpClient.Builder()
+            .addInterceptor(AuthenticationInterceptor())
+            .build()
+
         //create retrofit
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl("https://api.themoviedb.org/3/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient)
             .build()
 
         return retrofit.create(MovieDBService::class.java)
