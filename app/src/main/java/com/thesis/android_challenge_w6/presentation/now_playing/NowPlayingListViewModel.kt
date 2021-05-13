@@ -19,7 +19,8 @@ class NowPlayingListViewModel : ViewModel() {
         viewModelScope.launch {
             val nowPlayingMoviesResp = RestClient.getInstance().API.listNowPlayMovies(
                 language = "en-US",
-                page = 1
+                page = 1,
+                apiKey = "7519cb3f829ecd53bd9b7007076dbe23"
             )
             Log.e("Now Play", nowPlayingMoviesResp.results.toString())
             nowPlayingListResponse.value = nowPlayingMoviesResp.results
