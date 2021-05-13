@@ -27,7 +27,6 @@ class DetailFragment : Fragment() {
         (activity as MainActivity).appBarLayout?.visibility  = View.GONE
         val data = getDataFromBundle()
         data?.let {
-            Log.d("Test",data.toString())
             txtName!!.text = data.title
             txtOriginalName!!.text = data.originalTitle
             txtOverview!!.text = data.overview
@@ -43,7 +42,6 @@ class DetailFragment : Fragment() {
                 .into(imgMovie!!)
         }
     }
-
     private fun getDataFromBundle(): Movie? {
         return arguments?.getParcelable("movie")
     }
