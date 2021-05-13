@@ -35,7 +35,7 @@ class DetailFragment : Fragment() {
             txtPopularityValue!!.text = data.popularity.toString()
             txtReleaseDateValue!!.text = data.releaseDate
             rating_bar!!.rating = (data.voteAverage!!.toFloat() / 10) * 5
-            txtAverageVoteValue!!.text = data.voteAverage.toString() + "/10"
+            txtAverageVoteValue!!.text = "(${data.voteAverage}/10)"
             txtVoteCountValue!!.text = data.voteCount.toString()
             Glide.with(this.requireContext())
                 .load(NowPlayingListAdapter.URL_IMAGE + data.posterPath)
