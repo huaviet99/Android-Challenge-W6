@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.PagerAdapter
-import com.thesis.android_challenge_w6.presentation.favorite.TopRatedListFragment
+import com.thesis.android_challenge_w6.presentation.top_rated.TopRatedListFragment
 import com.thesis.android_challenge_w6.presentation.now_playing.NowPlayingListFragment
 
 

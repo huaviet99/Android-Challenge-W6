@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.thesis.android_challenge_w6.R
 import com.thesis.android_challenge_w6.api.movie.Movie
 import com.thesis.android_challenge_w6.databinding.FragmentNowPlayingBinding
-import com.thesis.android_challenge_w6.presentation.home.HomeFragment
+import com.thesis.android_challenge_w6.presentation.base.MovieListAdapter
 
 class NowPlayingListFragment : Fragment() {
-    private lateinit var nowPlayingListAdapter: NowPlayingListAdapter
+    private lateinit var movieListAdapter: MovieListAdapter
     private lateinit var nowPlayingListViewModel: NowPlayingListViewModel
     private lateinit var binding: FragmentNowPlayingBinding
     private lateinit var menu: Menu
@@ -39,7 +39,7 @@ class NowPlayingListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
         setHasOptionsMenu(true)
-        fetchNowPlaying()
+        fetchNowPlayingMovieList()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -58,7 +58,7 @@ class NowPlayingListFragment : Fragment() {
         when (item.itemId) {
             R.id.item_grid -> {
                 nowPlayingListViewModel.isLinearSwitched.value =
-                    nowPlayingListAdapter.toggleItemViewType()
+                    movieListAdapter.toggleItemViewType()
 
                 if (nowPlayingListViewModel.isLinearSwitched.value!!) {
                     binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
@@ -84,15 +84,15 @@ class NowPlayingListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         Log.d("NowPlaying", "setupRecycler")
-        nowPlayingListAdapter = NowPlayingListAdapter()
-        nowPlayingListAdapter.isLinearSwitched = nowPlayingListViewModel.isLinearSwitched.value!!
-        if (nowPlayingListAdapter.isLinearSwitched) {
+        movieListAdapter = MovieListAdapter()
+        movieListAdapter.isLinearSwitched = nowPlayingListViewModel.isLinearSwitched.value!!
+        if (movieListAdapter.isLinearSwitched) {
             binding.rvNowPlaying.layoutManager = LinearLayoutManager(activity)
         } else {
             binding.rvNowPlaying.layoutManager = GridLayoutManager(activity, 2)
 
         }
-        nowPlayingListAdapter.listener = object : NowPlayingListAdapter.NowPlayingAdapterListener {
+        movieListAdapter.listener = object : MovieListAdapter.MovieItemListener {
             override fun onItemClicked(movie: Movie) {
                 ViewCompat.postOnAnimationDelayed(view!!, // Delay to show ripple effect
                     Runnable {
@@ -103,13 +103,16 @@ class NowPlayingListFragment : Fragment() {
 
             }
         }
-        binding.rvNowPlaying.adapter = nowPlayingListAdapter
+        binding.rvNowPlaying.adapter = movieListAdapter
     }
 
-    private fun fetchNowPlaying() {
-        nowPlayingListViewModel.getNowPlaying().observe(viewLifecycleOwner, Observer {
+    private fun fetchNowPlayingMovieList() {
+        binding.progressBar.visibility = View.VISIBLE
+
+        nowPlayingListViewModel.getNowPlayingMovieList().observe(viewLifecycleOwner, Observer {
             activity?.runOnUiThread {
-                nowPlayingListAdapter.submitList(it)
+                binding.progressBar.visibility = View.GONE
+                movieListAdapter.submitList(it)
             }
         })
     }
